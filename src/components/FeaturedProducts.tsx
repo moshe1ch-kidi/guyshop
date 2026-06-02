@@ -1,24 +1,27 @@
-import { useProducts, Product } from '../hooks/useProducts';
+ import { useProducts, Product } from '../hooks/useProducts';
 
 interface FeaturedProductsProps {
   category: string | null;
+  searchTerm?: string;
   onClearCategory?: () => void;
 }
 
-export function FeaturedProducts({ category, onClearCategory }: FeaturedProductsProps) {
+export function FeaturedProducts({ category, searchTerm, onClearCategory }: FeaturedProductsProps) {
   const { products, loading, error } = useProducts();
 
-  const displayedProducts = category 
-    ? products.filter((p: Product) => p.category.includes(category) || category.includes(p.category))
-    : products;
+  const displayedProducts = products.filter((p: Product) => {
+    const matchesCategory = category ? (p.category.includes(category) || category.includes(p.category)) : true;
+    const matchesSearch = searchTerm ? (p.name.includes(searchTerm) || p.description.includes(searchTerm) || p.category.includes(searchTerm)) : true;
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <section className="py-12 pb-24 px-4 max-w-7xl mx-auto" id="shop">
       <div className="flex items-end justify-between mb-12 border-b border-gray-200 pb-4">
         <h2 className="text-3xl font-light text-gray-900">
-          {category ? `מוצרים בקטגוריה: ${category}` : 'הנמכרים ביותר'}
+          {searchTerm ? `תוצאות חיפוש: ${searchTerm}` : category ? `מוצרים בקטגוריה: ${category}` : 'הנמכרים ביותר'}
         </h2>
-        {category ? (
+        {(category || searchTerm) ? (
           <button onClick={onClearCategory} className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors uppercase tracking-wider">
             חזור לכל המוצרים <span dir="ltr">&rarr;</span>
           </button>
