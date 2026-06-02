@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Heebo', system-ui, -apple-system, sans-serif;
+}
+
