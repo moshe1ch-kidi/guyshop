@@ -12,20 +12,32 @@ import { Footer } from './components/Footer';
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   useEffect(() => {
-    if (selectedCategory) {
+    if (selectedCategory || searchTerm) {
       document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, searchTerm]);
 
   return (
     <div dir="rtl" className="min-h-screen font-sans bg-white text-gray-900 selection:bg-gray-900 selection:text-white">
-      <Navbar onSelectCategory={setSelectedCategory} />
+      <Navbar 
+        onSelectCategory={setSelectedCategory} 
+        onSearch={setSearchTerm} 
+        searchTerm={searchTerm} 
+      />
       <main>
-        {!selectedCategory && <Hero onShopClick={() => setSelectedCategory(null)} />}
-        {!selectedCategory && <CategoryGrid onSelectCategory={setSelectedCategory} />}
-        <FeaturedProducts category={selectedCategory} onClearCategory={() => setSelectedCategory(null)} />
+        {!selectedCategory && !searchTerm && <Hero onShopClick={() => setSelectedCategory(null)} />}
+        {!selectedCategory && !searchTerm && <CategoryGrid onSelectCategory={setSelectedCategory} />}
+        <FeaturedProducts 
+          category={selectedCategory} 
+          searchTerm={searchTerm}
+          onClearCategory={() => {
+            setSelectedCategory(null);
+            setSearchTerm('');
+          }} 
+        />
       </main>
       <Footer />
     </div>
