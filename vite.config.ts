@@ -5,6 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    base: './', // תוספת שמונעת שגיאות בנתיבי קבצים ב-GitHub Pages
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
